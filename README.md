@@ -74,3 +74,6 @@ bun run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 # nuxt3-study
+
+# 小知识
+1. 使用了NuxtLink标签导航的路由页面，只要链接出现在视口，就会预取对应的页面，所以在点击链接之前，就在后台加载了，所以非常慢
