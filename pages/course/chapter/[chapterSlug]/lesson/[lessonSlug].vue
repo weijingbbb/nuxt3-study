@@ -25,9 +25,9 @@
 const course = useCourse();
 const route = useRoute();
 
-if(route.params.lessonSlug === '3-typing-component-events'){
-    console.log(route.params.paramthatdoesnotexistwhoops.capitalizeIsNotAMethod());
-}
+// if(route.params.lessonSlug === '3-typing-component-events'){
+//     console.log(route.params.paramthatdoesnotexistwhoops.capitalizeIsNotAMethod());
+// }
 
 const chapter = computed(() => {
     return course.chapters.find(
@@ -39,6 +39,20 @@ const lesson = computed(() => {
         (lesson) => lesson.slug === route.params.lessonSlug
     );
 });
+
+
+if (!chapter.value) {
+    throw createError({
+        statusCode: 404,
+        message: 'Chapter not found, 没有找到对应目录数据。',
+    });
+}
+if (!lesson.value) {
+    throw createError({
+        statusCode: 404,
+        message: 'Lesson not found, 没有找到对应章节数据。',
+    });
+}
 
 const title = computed(() => {
     return `${lesson.value.title} - ${course.title}`;
