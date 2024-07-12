@@ -17,7 +17,9 @@
         <!-- <ClientOnly>
             <LessonCompleteButton :model-value="isLessonComplete" @update:model-value="toggleComplete" />
         </ClientOnly>    -->
-        <LessonCompleteButton :model-value="isLessonComplete" @update:model-value="toggleComplete" />
+        <LessonCompleteButton :model-value="isLessonComplete" @update:model-value="
+        throw createError('Could not update');
+            " />
     </div>
 </template>
 

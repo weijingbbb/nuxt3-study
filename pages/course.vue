@@ -28,11 +28,29 @@
         </div>
 
         <div class="prose p-12 bg-white rounded-md w-[65ch]">
-            <NuxtPage />
+            <NuxtErrorBoundary>
+                <NuxtPage />
+                <template #error="{ error }">
+                    <p>
+                        Oh no, something went wrong with the lesson!
+                        <code>{{ error }}</code>
+                    </p>
+                    <p>
+                        <button class="px-3 py-1 font-bold text-white bg-gray-500 rounded hover:cursor-pointer"
+                            @click="resetError(error)">
+                            Reset
+                        </button>
+                    </p>
+                </template>
+            </NuxtErrorBoundary>
         </div>
     </div>
 </template>
 
 <script setup>
 const { chapters } = useCourse();
+
+const resetError = (error) => {
+    error.value = null;
+};
 </script>
