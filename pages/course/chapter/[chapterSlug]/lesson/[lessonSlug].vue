@@ -22,40 +22,46 @@
 </template>
 
 <script setup>
-const course = useCourse();
-const route = useRoute();
-
 // if(route.params.lessonSlug === '3-typing-component-events'){
 //     console.log(route.params.paramthatdoesnotexistwhoops.capitalizeIsNotAMethod());
 // }
 
 // 利用编译宏来做路由校验
 definePageMeta({
-    validate({ params }) {
-        // 只能访问里面的变量，外面的访问不到
+    // 路由器中间件，用了validate，就不能再使用其他中间件了
+    // validate({ params }) {
+    // 只能访问里面的变量，外面的访问不到
+    middleware: (to, from) => {
+        const { params } = to
         const course = useCourse();
         const chapter = course.chapters.find(
             (chapter) => chapter.slug === params.chapterSlug
         );
         if (!chapter) {
-            return createError({
+            return abortNavigation(createError({
                 statusCode: 404,
                 message: 'Chapter not found',
-            });
+            }));
         }
         const lesson = chapter.lessons.find(
             (lesson) => lesson.slug === params.lessonSlug
         );
         if (!lesson) {
-            return createError({
+            return abortNavigation(createError({
                 statusCode: 404,
                 message: 'Lesson not found',
-            });
+            }));
         }
         // 返回true才能跳转页面
-        return true;
+        // return true;
+        // 使用了middleware后，不返回也能正常跳转了
     },
 });
+
+
+const course = useCourse();
+const route = useRoute();
+
 
 const chapter = computed(() => {
     return course.chapters.find(
@@ -85,9 +91,6 @@ const lesson = computed(() => {
 const title = computed(() => {
     return `${lesson.value.title} - ${course.title}`;
 });
-useHead({
-    title,
-});
 
 // const progress = useState('progress', () => {
 //     return [];
@@ -116,4 +119,9 @@ const toggleComplete = () => {
         lesson.value.number - 1
     ] = !isLessonComplete.value;
 };
+
+
+useHead({
+    title,
+});
 </script>
