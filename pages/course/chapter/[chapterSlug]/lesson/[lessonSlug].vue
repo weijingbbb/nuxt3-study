@@ -29,6 +29,34 @@ const route = useRoute();
 //     console.log(route.params.paramthatdoesnotexistwhoops.capitalizeIsNotAMethod());
 // }
 
+// 利用编译宏来做路由校验
+definePageMeta({
+    validate({ params }) {
+        // 只能访问里面的变量，外面的访问不到
+        const course = useCourse();
+        const chapter = course.chapters.find(
+            (chapter) => chapter.slug === params.chapterSlug
+        );
+        if (!chapter) {
+            return createError({
+                statusCode: 404,
+                message: 'Chapter not found',
+            });
+        }
+        const lesson = chapter.lessons.find(
+            (lesson) => lesson.slug === params.lessonSlug
+        );
+        if (!lesson) {
+            return createError({
+                statusCode: 404,
+                message: 'Lesson not found',
+            });
+        }
+        // 返回true才能跳转页面
+        return true;
+    },
+});
+
 const chapter = computed(() => {
     return course.chapters.find(
         (chapter) => chapter.slug === route.params.chapterSlug
@@ -41,18 +69,18 @@ const lesson = computed(() => {
 });
 
 
-if (!chapter.value) {
-    throw createError({
-        statusCode: 404,
-        message: 'Chapter not found, 没有找到对应目录数据。',
-    });
-}
-if (!lesson.value) {
-    throw createError({
-        statusCode: 404,
-        message: 'Lesson not found, 没有找到对应章节数据。',
-    });
-}
+// if (!chapter.value) {
+//     throw createError({
+//         statusCode: 404,
+//         message: 'Chapter not found, 没有找到对应目录数据。',
+//     });
+// }
+// if (!lesson.value) {
+//     throw createError({
+//         statusCode: 404,
+//         message: 'Lesson not found, 没有找到对应章节数据。',
+//     });
+// }
 
 const title = computed(() => {
     return `${lesson.value.title} - ${course.title}`;
