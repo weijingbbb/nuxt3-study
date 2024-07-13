@@ -31,7 +31,8 @@ definePageMeta({
     // 路由器中间件，用了validate，就不能再使用其他中间件了
     // validate({ params }) {
     // 只能访问里面的变量，外面的访问不到
-    middleware: (to, from) => {
+    middleware: [(to, from) => {
+        console.log('内联中间件');
         const { params } = to
         const course = useCourse();
         const chapter = course.chapters.find(
@@ -56,6 +57,8 @@ definePageMeta({
         // return true;
         // 使用了middleware后，不返回也能正常跳转了
     },
+    'auth',
+    ]
 });
 
 
