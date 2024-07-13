@@ -11,5 +11,5 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
-  modules: ["@nuxtjs/tailwindcss", '@vueuse/nuxt',]
+  modules: ["@nuxtjs/tailwindcss", '@vueuse/nuxt', '@nuxtjs/supabase']
 })
