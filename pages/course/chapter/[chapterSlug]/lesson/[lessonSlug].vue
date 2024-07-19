@@ -37,6 +37,7 @@ definePageMeta({
     // 只能访问里面的变量，外面的访问不到
     middleware: [
         function ({ params }, from) {
+            console.log('lesson页-内联中间件');
             const course = useCourse();
 
             const chapter = course.chapters.find(

@@ -9,15 +9,24 @@
 
 <script setup lang="ts">
 const { title } = useCourse();
+const { query } = useRoute();
 const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 
-// navigateTo('http://localhost:3000/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3', { external: true })
-
+watchEffect(async () => {
+    if (user.value) {
+        await navigateTo(query.redirectTo as string, {
+            replace: true,
+        });
+    }
+});
 const login = async () => {
+    const redirectTo = `${window.location.origin}${query.redirectTo}`;
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
+        options: { redirectTo },
     });
-    console.log('data---', data)
+
 
     if (error) {
         console.error(error);
