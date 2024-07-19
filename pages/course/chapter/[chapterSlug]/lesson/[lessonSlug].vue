@@ -22,11 +22,7 @@
 </template>
 
 <script setup>
-// if(route.params.lessonSlug === '3-typing-component-events'){
-//     console.log(route.params.paramthatdoesnotexistwhoops.capitalizeIsNotAMethod());
-// }
-
-const course = useCourse();
+const course = await useCourse();
 const route = useRoute();
 const { chapterSlug, lessonSlug } = route.params;
 const lesson = await useLesson(chapterSlug, lessonSlug);
@@ -38,11 +34,9 @@ definePageMeta({
     // validate({ params }) {
     // 只能访问里面的变量，外面的访问不到
     middleware: [
-        function ({ params }, from) {
-            console.log('lesson页-内联中间件');
-            const course = useCourse();
-
-            const chapter = course.chapters.find(
+        async function ({ params }, from) {
+            const course = await useCourse();
+            const chapter = course.value.chapters.find(
                 (chapter) => chapter.slug === params.chapterSlug
             );
 
@@ -74,13 +68,13 @@ definePageMeta({
 
 
 const chapter = computed(() => {
-    return course.chapters.find(
+    return course.value.chapters.find(
         (chapter) => chapter.slug === route.params.chapterSlug
     );
 });
 
 const title = computed(() => {
-    return `${lesson.value.title} - ${course.title}`;
+    return `${lesson.value.title} - ${course.value.title}`;
 });
 useHead({
     title,
