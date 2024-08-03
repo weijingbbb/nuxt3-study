@@ -17,7 +17,7 @@
         <!-- <ClientOnly>
             <LessonCompleteButton :model-value="isLessonComplete" @update:model-value="toggleComplete" />
         </ClientOnly>    -->
-        <LessonCompleteButton v-if="user" :model-value="isCompleted" @update:model-value="toggleComplete" />
+        <LessonCompleteButton  :model-value="isCompleted" @update:model-value="toggleComplete" />
     </div>
 </template>
 
