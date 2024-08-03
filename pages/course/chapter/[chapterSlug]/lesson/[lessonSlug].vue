@@ -17,7 +17,7 @@
         <!-- <ClientOnly>
             <LessonCompleteButton :model-value="isLessonComplete" @update:model-value="toggleComplete" />
         </ClientOnly>    -->
-        <LessonCompleteButton  :model-value="isCompleted" @update:model-value="toggleComplete" />
+        <LessonCompleteButton v-if="user" :model-value="isCompleted" @update:model-value="toggleComplete" />
     </div>
 </template>
 
@@ -26,6 +26,7 @@ const course = await useCourse();
 const route = useRoute();
 const { chapterSlug, lessonSlug } = route.params;
 const lesson = await useLesson(chapterSlug, lessonSlug);
+const user = useSupabaseUser();
 const store = useCourseProgress();
 const { initialize, toggleComplete } = store;
 initialize();

@@ -4,10 +4,11 @@ export const useCourseProgress = defineStore(
     'courseProgress',
     () => {
         // 初始化一个本地数据
-        const progress = useLocalStorage(
-            'progress',
-            {}
-        );
+        // const progress = useLocalStorage(
+        //     'progress',
+        //     {}
+        // );
+        const progress = ref<any>({});
         const initialized = ref(false);
 
         async function initialize() {
@@ -45,15 +46,35 @@ export const useCourseProgress = defineStore(
             p[chapter] = {
                 ...p[chapter],
                 [lesson]: !currentProgress
+            }
+
+            // Update the progress in the DB
+            try {
+                await $fetch(
+                    `/api/course/chapter/${chapter}/lesson/${lesson}/progress`,
+                    {
+                        method: 'POST',
+                        // Automatically stringified by ofetch
+                        body: {
+                            completed: !currentProgress,
+                        },
+                    }
+                );
+            } catch (error) {
+                console.error(error);
+
+                // If the request failed, revert the progress value
+                progress.value[chapter] = {
+                    ...progress.value[chapter],
+                    [lesson]: currentProgress,
+                };
+            }
         }
 
-        // TODO: Update in DB (lesson 6-4)
-    }
 
-
-    return {
-        initialize,
-        progress,
-        toggleComplete
-    }
+        return {
+            initialize,
+            progress,
+            toggleComplete
+        }
     });
