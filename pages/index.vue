@@ -6,4 +6,5 @@
 
 <script setup lang="ts">
 const firstLesson = await useFirstLesson();
+console.log('firstLesson---------',firstLesson)
 </script>
